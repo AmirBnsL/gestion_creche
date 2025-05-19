@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>Admin Home</title></head>
+<body>
+<h1>Admin Dashboard</h1>
+<table>
+    <tr><th>Name</th><th>Parent</th><th>Actions</th></tr>
+    <tr th:each="child : ${approvedChildren}">
+        <td th:text="${child.getFirstName()} + ' ' + ${child.getLastName()}"></td>
+        <td th:text="${child.getParent().getUsername()}"></td>
+        <td th:text="${child.status}"></td>
+    </tr>
+</table>
+<a href="/admin/pending" >Pending Registrations</a>
+</body>
+</html>

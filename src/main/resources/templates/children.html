@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>Liste des enfants</title></head>
+<body>
+<h2>Enfants inscrits</h2>
+<a th:href="@{/children/add}">Ajouter un enfant</a>
+<table border="1">
+    <tr>
+        <th>Prénom</th>
+        <th>Nom</th>
+        <th>Date de naissance</th>
+        <th>Adresse</th>
+        <th>Allergies</th>
+        <th>Besoins particuliers</th>
+        <th>Parent</th>
+        <th>Admission</th>
+    </tr>
+    <tr th:each="child : ${children}">
+        <td th:text="${child.firstName}"></td>
+        <td th:text="${child.lastName}"></td>
+        <td th:text="${child.birthDate}"></td>
+        <td th:text="${child.address}"></td>
+        <td th:text="${child.allergies}"></td>
+        <td th:text="${child.specialNeeds}"></td>
+        <td th:text="${child.parent != null ? child.parent.username : ''}"></td>
+        <td th:text="${child.status}"></td>
+    </tr>
+</table>
+</body>
+</html>

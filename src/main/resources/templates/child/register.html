@@ -1,0 +1,41 @@
+<!-- templates/child/register.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Register Child</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<h1>Register Your Child</h1>
+<form th:action="@{/child/register}" th:object="${}" method="post">
+    <div>
+        <label for="firstName">First Name:</label>
+        <input type="text" id="firstName" th:field="*{firstName}" required>
+    </div>
+    <div>
+        <label for="lastName">Last Name:</label>
+        <input type="text" id="lastName" th:field="*{lastName}" required>
+    </div>
+    <div>
+        <label for="birthDate">Birth Date:</label>
+        <input type="date" id="birthDate" th:field="*{birthDate}" required>
+    </div>
+    <div>
+        <label for="address">Address:</label>
+        <input type="text" id="address" th:field="*{address}" required>
+    </div>
+    <div>
+        <label for="allergies">Allergies:</label>
+        <textarea id="allergies" th:field="*{allergies}"></textarea>
+    </div>
+    <div>
+        <label for="specialNeeds">Special Needs:</label>
+        <textarea id="specialNeeds" th:field="*{specialNeeds}"></textarea>
+    </div>
+    <div>
+        <button type="submit">Submit Registration</button>
+    </div>
+</form>
+</body>
+</html>

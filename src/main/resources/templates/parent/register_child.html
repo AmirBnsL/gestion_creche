@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>Register Child</title></head>
+<body>
+<h2>Register Child</h2>
+<form th:action="@{/parent/child/register}" th:object="${child}" method="post">
+    <label>First Name: <input type="text" th:field="*{firstName}" /></label><br/>
+    <label>Last Name: <input type="text" th:field="*{lastName}" /></label><br/>
+    <label>Birth Date: <input type="date" th:field="*{birthDate}" /></label><br/>
+    <label>Address: <input type="text" th:field="*{address}" /></label><br/>
+    <label>Allergies: <textarea th:field="*{allergies}"></textarea></label><br/>
+    <label>Special Needs: <textarea th:field="*{specialNeeds}"></textarea></label><br/>
+    <button type="submit">Submit</button>
+</form>
+</body>
+</html>
