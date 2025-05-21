@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Marquer la Consommation des Repas</title>
+</head>
+<body>
+<h1>Marquer la Consommation des Repas</h1>
+<form th:action="@{/kitchen/mark-meals}" method="post">
+    <label>Enfant :</label>
+    <label>
+        <select name="childId" required>
+            <option th:each="child : ${children}" th:value="${child.id}" th:text="${child.firstName + ' ' + child.lastName}"></option>
+        </select>
+    </label>
+    <label>Type de Repas :</label>
+    <label>
+        <select name="mealType" required>
+            <option th:each="type : ${mealTypes}" th:value="${type}" th:text="${type}"></option>
+        </select>
+    </label>
+    <button type="submit">Marquer</button>
+</form>
+
+<h2>Historique des Repas</h2>
+<div th:if="${mealHistory != null}">
+    <div th:each="type : ${mealTypes}">
+        <h3 th:text="${type}"></h3>
+        <table>
+            <thead>
+            <tr>
+                <th>Enfant</th>
+                <th>Heure</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="consumption : ${mealHistory.get(type)}">
+                <td th:text="${consumption.child.firstName + ' ' + consumption.child.lastName}"></td>
+                <td th:text="${#temporals.format(consumption.time, 'HH:mm')}"></td>
+            </tr>
+            <tr th:if="${mealHistory.get(type) == null || mealHistory.get(type).isEmpty()}">
+                <td colspan="2">Aucun enfant n'a mangé ce repas</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div th:if="${mealHistory == null}">
+    <p>Aucun historique des repas disponible.</p>
+</div>
+
+<a th:href="@{/kitchen/home}">Retour</a>
+</body>
+</html>

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Development Records</title>
+</head>
+<body>
+<h2>Children Development Records</h2>
+<ul>
+    <li th:each="child : ${children}">
+        <span th:text="${child.firstName + ' ' + child.lastName}"></span>
+        <a th:href="@{'/educator/development/' + ${child.id}}">Get Detailed Development</a>
+    </li>
+</ul>
+<a th:href="@{/educator/home}">Back to Dashboard</a>
+</body>
+</html>

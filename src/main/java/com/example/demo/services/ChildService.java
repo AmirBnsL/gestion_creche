@@ -47,4 +47,17 @@ public class ChildService {
     public List<Child> getApprovedChildren() {
         return childRepository.findByStatus(ChildStatus.VALIDATED);
     }
+
+    public Child getChildByIdAndParentUsername(Long id, String name) {
+        User parent = userService.findByUsername(name);
+        return childRepository.findByIdAndParent(id, parent).orElseThrow(() -> new IllegalArgumentException("Child not found"));
+    }
+
+    public List<Child> getAll() {
+        return childRepository.findAll();
+    }
+
+    public List<Child> getAvailableChildren() {
+        return childRepository.findChildrenWhoHaveNotDeparted();
+    }
 }

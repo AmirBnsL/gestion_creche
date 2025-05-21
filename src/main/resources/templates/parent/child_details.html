@@ -1,0 +1,92 @@
+<!-- src/main/resources/templates/parent/child-details.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Détails de l'enfant</title>
+</head>
+<body>
+<h1 th:text="${child.firstName + ' ' + child.lastName}">Nom de l'enfant</h1>
+<p><strong>Date de naissance :</strong> <span th:text="${#dates.format(child.birthDate, 'yyyy-MM-dd')}"></span></p>
+<p><strong>Adresse :</strong> <span th:text="${child.address}"></span></p>
+<p><strong>Allergies :</strong> <span th:text="${child.allergies}"></span></p>
+<p><strong>Besoins particuliers :</strong> <span th:text="${child.specialNeeds}"></span></p>
+
+<h2>Présence aujourd'hui</h2>
+<p>
+        <span th:if="${attendance != null}">
+            Arrivé à <span th:text="${#temporals.format(attendance.arrivalTime, 'HH:mm')}"></span><br/>
+            <span th:if="${attendance.departureTime != null}">
+                Parti à <span th:text="${#temporals.format(attendance.departureTime, 'HH:mm')}"></span>
+            </span>
+            <span th:if="${attendance.departureTime == null}">Pas encore parti</span>
+        </span>
+    <span th:if="${attendance == null}">Pas de présence enregistrée aujourd'hui</span>
+</p>
+
+<h2>Repas Aujourd'hui</h2>
+<table>
+    <thead>
+    <tr>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Heure de Consommation</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="consumption : ${mealConsumptions}">
+        <td th:text="${consumption.meal.mealType}"></td>
+        <td th:text="${consumption.meal.description}"></td>
+        <td th:text="${#temporals.format(consumption.time, 'HH:mm')}"></td>
+    </tr>
+    <tr th:if="${mealConsumptions.isEmpty()}">
+        <td colspan="3">Aucun repas enregistré aujourd'hui</td>
+    </tr>
+    </tbody>
+</table>
+
+<h2>Développements</h2>
+<table>
+    <thead>
+    <tr>
+        <th>Date</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="development : ${developments}">
+        <td th:text="${#temporals.format(development.date, 'yyyy-MM-dd')}"></td>
+        <td th:text="${development.observations}"></td>
+    </tr>
+    <tr th:if="${developments.isEmpty()}">
+        <td colspan="2">Aucun développement enregistré</td>
+    </tr>
+    </tbody>
+</table>
+
+
+<h2>Activités Aujourd'hui</h2>
+<table>
+    <thead>
+    <tr>
+        <th>debut</th>
+        <th>fin</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="activity : ${activities}">
+        <td th:text="${#temporals.format(activity.getStartTime(), 'HH:mm')}"></td>
+        <td th:text="${#temporals.format(activity.getEndTime(), 'HH:mm')}"></td>
+        <td th:text="${activity.description}"></td>
+    </tr>
+    <tr th:if="${activities.isEmpty()}">
+        <td colspan="2">Aucune activité enregistrée aujourd'hui</td>
+    </tr>
+    </tbody>
+</table>
+
+<a th:href="@{/parent/children}">Retour</a>
+
+</body>
+</html>

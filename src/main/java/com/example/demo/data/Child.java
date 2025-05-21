@@ -3,6 +3,9 @@ import com.example.demo.enums.ChildStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Collection;
+import java.util.Set;
+
 @Entity
 @Setter
 @Getter
@@ -25,4 +28,17 @@ public class Child {
     private User parent;
 
     private ChildStatus status;
+
+    @OneToMany
+    Collection<Attendance> attendances;
+
+    @OneToMany
+    Collection<DevelopmentRecord> developmentRecords;
+
+    @OneToMany(mappedBy = "child", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<MealConsumption> mealConsumptions;
+
+    @ManyToMany(mappedBy = "participants")
+    private Set<Activity> activities;
+
 }

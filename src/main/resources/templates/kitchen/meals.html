@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>Repas du Jour</title></head>
+<body>
+<h2>Ajouter un repas pour un enfant</h2>
+<form th:action="@{/kitchen/meals}" th:object="${meal}" method="post">
+    <label>Enfant :</label>
+    <select th:field="*{child}" required>
+        <option th:each="c : ${children}" th:value="${c.id}" th:text="${c.firstName + ' ' + c.lastName}"></option>
+    </select>
+    <input type="text" th:field="*{description}" placeholder="Description" required/>
+    <button type="submit">Enregistrer</button>
+</form>
+
+<h2>Repas Enregistrés Aujourd'hui</h2>
+<table border="1">
+    <thead>
+    <tr><th>Enfant</th><th>Description</th></tr>
+    </thead>
+    <tbody>
+    <tr th:each="m : ${meals}">
+        <td th:text="${m.child.firstName + ' ' + m.child.lastName}"></td>
+        <td th:text="${m.description}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<a th:href="@{/kitchen/home}">Retour</a>
+</body>
+</html>

@@ -1,8 +1,15 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head><meta charset="UTF-8"><title>Parent Home</title></head>
+<head>
+    <meta charset="UTF-8">
+    <title>Parent Home</title>
+</head>
 <body>
 <h1>Parent Dashboard</h1>
-<a th:href="@{/parent/child/register}">Register Child</a>
+<ul>
+    <li><a th:href="@{/parent/child/register}">Register Child</a></li>
+    <li><a th:href="@{/parent/children}">View Registered Children</a></li>
+    <li><a th:href="@{/parent/home}">Back to Dashboard</a></li>
+</ul>
 </body>
 </html>

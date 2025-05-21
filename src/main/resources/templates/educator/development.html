@@ -1,0 +1,48 @@
+<!-- src/main/resources/templates/educator/development.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>Développement</title></head>
+<body>
+<h2>Suivi Développement : <span th:text="${child.firstName + ' ' + child.lastName}"></span></h2>
+
+<!-- Form to add a new development record -->
+<form th:action="@{/educator/development}" th:object="${record}" method="post">
+    <input type="hidden" th:field="*{child.id}" />
+    <div>
+        <label>Observations</label>
+        <label>
+            <textarea th:field="*{observations}" placeholder="Observations"></textarea>
+        </label>
+    </div>
+    <div>
+        <label>Progrès</label>
+        <label>
+            <textarea th:field="*{progress}" placeholder="Progrès"></textarea>
+        </label>
+    </div>
+    <button type="submit">Ajouter</button>
+</form>
+
+<!-- Section to display all development records for the current child -->
+<h3>Historique des Développements</h3>
+<table>
+    <thead>
+    <tr>
+        <th>Date</th>
+        <th>Observations</th>
+        <th>Progrès</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="dev : ${developments}">
+        <td th:text="${dev.date}"></td>
+        <td th:text="${dev.observations}"></td>
+        <td th:text="${dev.progress}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<a th:href="@{/educator/home}">Retour au tableau de bord</a>
+<a th:href="@{/educator/development}">Voir tous les developements des enfants</a>
+</body>
+</html>

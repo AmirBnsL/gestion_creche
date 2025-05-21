@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Ajouter des Repas</title>
+</head>
+<body>
+<h1>Ajouter des Repas pour Aujourd'hui</h1>
+<form th:action="@{/kitchen/add-meals}" method="post">
+    <label>Type de Repas :</label>
+    <select name="mealType" required>
+        <option th:each="type : ${T(com.example.demo.enums.MealType).values()}" th:value="${type}" th:text="${type}"></option>
+    </select>
+    <label>Description :</label>
+    <input type="text" name="description" placeholder="Description" required/>
+    <button type="submit">Ajouter</button>
+</form>
+
+<h2>Repas Enregistrés</h2>
+<table>
+    <thead>
+    <tr>
+        <th>Type</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="meal : ${meals}">
+        <td th:text="${meal.mealType}"></td>
+        <td th:text="${meal.description}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<a th:href="@{/kitchen/home}">Retour</a>
+</body>
+</html>

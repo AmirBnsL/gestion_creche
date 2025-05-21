@@ -16,6 +16,7 @@
         <th>Last Name</th>
         <th>Birth Date</th>
         <th>Status</th>
+        <th>Actions</th>
     </tr>
     </thead>
     <tbody>
@@ -24,6 +25,9 @@
         <td th:text="${child.lastName}">Last</td>
         <td th:text="${#dates.format(child.birthDate, 'yyyy-MM-dd')}">2000-01-01</td>
         <td th:text="${child.status}">PENDING</td>
+        <td>
+            <a th:href="@{/parent/child/{id}(id=${child.id})}">View Details</a>
+        </td>
     </tr>
     </tbody>
 </table>

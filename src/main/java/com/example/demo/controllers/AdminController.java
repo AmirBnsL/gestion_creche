@@ -1,6 +1,7 @@
 package com.example.demo.controllers;
 
 import com.example.demo.services.ChildService;
+import com.example.demo.services.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class AdminController {
 
     private final ChildService childService;
+    private final UserService userService;
 
     @GetMapping("/home")
     public String adminHome(Model model) {
@@ -28,6 +30,13 @@ public class AdminController {
         return "admin/pending_children";
     }
 
+
+    @GetMapping("/user/pending")
+    public String viewPendingAccounts(Model model) {
+        model.addAttribute("accounts", userService.getPendingUsers());
+        return "admin/pending_accounts";
+    }
+
     @PostMapping("/approve/{id}")
     public String approve(@PathVariable Long id) {
         childService.approveChild(id);
@@ -39,4 +48,17 @@ public class AdminController {
         childService.rejectChild(id);
         return "redirect:/admin/pending";
     }
+
+    @PostMapping("/account/approve/{id}")
+    public String approveAccount(@PathVariable Long id) {
+        userService.approveAccount(id);
+        return "redirect:/admin/user/pending";
+    }
+
+    @PostMapping("/account/reject/{id}")
+    public String rejectAccount(@PathVariable Long id) {
+        userService.rejectAccount(id);
+        return "redirect:/admin/user/pending";
+    }
+
 }

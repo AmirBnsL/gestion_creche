@@ -1,0 +1,40 @@
+<!-- src/main/resources/templates/educator/attendance.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Présences du Jour</title>
+</head>
+<body>
+<h2>Présences du Jour - <span th:text="${#temporals.format(today,'dd-MM-yyyy')}"></span></h2>
+<table border="1">
+    <thead>
+    <tr>
+        <th>Nom</th>
+        <th>Arrivée</th>
+        <th>Départ</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="child : ${children}">
+        <td th:text="${child.firstName + ' ' + child.lastName}"></td>
+        <td th:text="${attendanceMap[child.id] != null && attendanceMap[child.id].arrivalTime != null ? #temporals.format(attendanceMap[child.id].arrivalTime, 'HH:mm') : '—'}"></td>
+        <td th:text="${attendanceMap[child.id] != null && attendanceMap[child.id].departureTime != null ? #temporals.format(attendanceMap[child.id].departureTime, 'HH:mm') : '—'}"></td>
+        <td>
+            <form th:if="${attendanceMap[child.id] == null}"
+                  th:action="@{'/educator/attendance/arrive/' + ${child.id}}"
+                  method="post">
+                <button type="submit">Arrivée</button>
+            </form>
+            <form th:if="${attendanceMap[child.id] != null and attendanceMap[child.id].departureTime == null}"
+                  th:action="@{'/educator/attendance/depart/' + ${attendanceMap[child.id].id}}"
+                  method="post">
+                <button type="submit">Départ</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<a th:href="@{/educator/home}">Retour au tableau de bord</a>
+</body>
+</html>

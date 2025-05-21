@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>Pending Registrations</title></head>
+<body>
+<h2>Pending Children</h2>
+<table>
+    <tr><th>Username</th><th>Email</th><th>Status</th><th>Actions</th></tr>
+    <tr th:each="account : ${accounts}">
+        <td th:text="${account.username}"></td>
+        <td th:text="${account.email}"></td>
+        <td th:text="${account.childStatus}"></td>
+        <td>
+            <form th:action="@{'/admin/account/approve/' + ${account.id}}" method="post">
+                <button type="submit">Approve</button>
+            </form>
+            <form th:action="@{'/admin/account/reject/' + ${account.id}}" method="post">
+                <button type="submit">Reject</button>
+            </form>
+        </td>
+    </tr>
+</table>
+<a href="/admin/home">Return Home</a>
+</body>
+</html>

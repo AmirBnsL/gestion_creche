@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Accueil du Personnel de Cuisine</title>
+</head>
+<body>
+<h1>Tableau de Bord de la Cuisine</h1>
+<ul>
+    <li><a th:href="@{/kitchen/add-meals}">Ajouter des Repas</a></li>
+    <li><a th:href="@{/kitchen/mark-meals}">Marquer la Consommation des Repas</a></li>
+</ul>
+<a th:href="@{/logout}">Se Déconnecter</a>
+</body>
+</html>

@@ -1,8 +1,11 @@
 package com.example.demo.data;
 
+import com.example.demo.enums.ChildStatus;
 import com.example.demo.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.Collection;
 
 @Entity
 @Setter
@@ -22,4 +25,12 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    private ChildStatus childStatus;
+
+    @OneToMany
+    Collection<Attendance> attendances;
+
+    @OneToMany
+    Collection<Activity> activities;
 }
