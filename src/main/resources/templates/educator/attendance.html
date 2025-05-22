@@ -1,40 +1,96 @@
-<!-- src/main/resources/templates/educator/attendance.html -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Présences du Jour</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-<h2>Présences du Jour - <span th:text="${#temporals.format(today,'dd-MM-yyyy')}"></span></h2>
-<table border="1">
-    <thead>
-    <tr>
-        <th>Nom</th>
-        <th>Arrivée</th>
-        <th>Départ</th>
-        <th>Actions</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="child : ${children}">
-        <td th:text="${child.firstName + ' ' + child.lastName}"></td>
-        <td th:text="${attendanceMap[child.id] != null && attendanceMap[child.id].arrivalTime != null ? #temporals.format(attendanceMap[child.id].arrivalTime, 'HH:mm') : '—'}"></td>
-        <td th:text="${attendanceMap[child.id] != null && attendanceMap[child.id].departureTime != null ? #temporals.format(attendanceMap[child.id].departureTime, 'HH:mm') : '—'}"></td>
-        <td>
-            <form th:if="${attendanceMap[child.id] == null}"
-                  th:action="@{'/educator/attendance/arrive/' + ${child.id}}"
-                  method="post">
-                <button type="submit">Arrivée</button>
-            </form>
-            <form th:if="${attendanceMap[child.id] != null and attendanceMap[child.id].departureTime == null}"
-                  th:action="@{'/educator/attendance/depart/' + ${attendanceMap[child.id].id}}"
-                  method="post">
-                <button type="submit">Départ</button>
-            </form>
-        </td>
-    </tr>
-    </tbody>
-</table>
-<a th:href="@{/educator/home}">Retour au tableau de bord</a>
+    <header class="header">
+        <div class="container header-content">
+            <a href="#" class="logo">
+                <i class="fas fa-child"></i> Daycare
+            </a>
+            <nav class="nav">
+                <a th:href="@{/educator/home}" class="nav-link">
+                    <i class="fas fa-home"></i> Accueil
+                </a>
+                <a th:href="@{/educator/activities}" class="nav-link">
+                    <i class="fas fa-running"></i> Activités
+                </a>
+                <a th:href="@{/educator/development}" class="nav-link">
+                    <i class="fas fa-chart-line"></i> Développement
+                </a>
+                <a th:href="@{/logout}" class="nav-link">
+                    <i class="fas fa-sign-out-alt"></i> Déconnexion
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1>
+            <i class="fas fa-clipboard-check" style="color: var(--primary);"></i>
+            Présences du Jour - <span th:text="${#temporals.format(today,'dd-MM-yyyy')}"></span>
+        </h1>
+        
+        <div class="card">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Arrivée</th>
+                        <th>Départ</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="child : ${children}">
+                        <td>
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-child" style="color: var(--primary);"></i>
+                                <span th:text="${child.firstName + ' ' + child.lastName}"></span>
+                            </div>
+                        </td>
+                        <td th:text="${attendanceMap[child.id] != null && attendanceMap[child.id].arrivalTime != null ? #temporals.format(attendanceMap[child.id].arrivalTime, 'HH:mm') : '—'}"></td>
+                        <td th:text="${attendanceMap[child.id] != null && attendanceMap[child.id].departureTime != null ? #temporals.format(attendanceMap[child.id].departureTime, 'HH:mm') : '—'}"></td>
+                        <td>
+                            <form th:if="${attendanceMap[child.id] == null}"
+                                  th:action="@{'/educator/attendance/arrive/' + ${child.id}}"
+                                  method="post" style="display: inline;">
+                                <button type="submit" class="btn btn-success btn-sm">
+                                    <i class="fas fa-sign-in-alt"></i> Arrivée
+                                </button>
+                            </form>
+                            <form th:if="${attendanceMap[child.id] != null and attendanceMap[child.id].departureTime == null}"
+                                  th:action="@{'/educator/attendance/depart/' + ${attendanceMap[child.id].id}}"
+                                  method="post" style="display: inline;">
+                                <button type="submit" class="btn btn-warning btn-sm">
+                                    <i class="fas fa-sign-out-alt"></i> Départ
+                                </button>
+                            </form>
+                            <span th:if="${attendanceMap[child.id] != null and attendanceMap[child.id].departureTime != null}" class="badge badge-success">
+                                <i class="fas fa-check"></i> Complet
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="mt-4">
+            <a th:href="@{/educator/home}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Retour au tableau de bord
+            </a>
+        </div>
+    </div>
+    
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Daycare Management System</p>
+        </div>
+    </footer>
 </body>
 </html>

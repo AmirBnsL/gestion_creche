@@ -1,16 +1,66 @@
-<!-- src/main/resources/templates/educator/home.html -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Educator Dashboard</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-<h1>Educator Dashboard</h1>
-<ul>
-    <li><a th:href="@{/educator/attendance}">Manage Attendance</a></li>
-    <li><a th:href="@{/educator/activities}">Plan Activities</a></li>
-    <li><a th:href="@{/educator/development}">Suivi Developpement</a></li>
-</ul>
+    <header class="header">
+        <div class="container header-content">
+            <a href="#" class="logo">
+                <i class="fas fa-child"></i> Daycare
+            </a>
+            <nav class="nav">
+                <a th:href="@{/educator/home}" class="nav-link">
+                    <i class="fas fa-home"></i> Accueil
+                </a>
+                <a th:href="@{/logout}" class="nav-link">
+                    <i class="fas fa-sign-out-alt"></i> Déconnexion
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1>
+            <i class="fas fa-chalkboard-teacher" style="color: var(--primary);"></i>
+            Tableau de bord éducateur
+        </h1>
+        
+        <div class="grid grid-cols-3">
+            <a th:href="@{/educator/attendance}" class="menu-card">
+                <div class="menu-icon">
+                    <i class="fas fa-clipboard-check"></i>
+                </div>
+                <h3 class="menu-title">Gérer les présences</h3>
+                <p class="menu-description">Enregistrer les arrivées et départs des enfants</p>
+            </a>
+            
+            <a th:href="@{/educator/activities}" class="menu-card">
+                <div class="menu-icon">
+                    <i class="fas fa-running"></i>
+                </div>
+                <h3 class="menu-title">Planifier des activités</h3>
+                <p class="menu-description">Créer et gérer les activités pour les enfants</p>
+            </a>
+            
+            <a th:href="@{/educator/development}" class="menu-card">
+                <div class="menu-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3 class="menu-title">Suivi développement</h3>
+                <p class="menu-description">Suivre le développement des enfants</p>
+            </a>
+        </div>
+    </div>
+    
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Daycare Management System</p>
+        </div>
+    </footer>
 </body>
 </html>

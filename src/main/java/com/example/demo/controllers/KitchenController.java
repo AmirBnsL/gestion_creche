@@ -3,9 +3,12 @@ package com.example.demo.controllers;
 import com.example.demo.data.Child;
 
 import com.example.demo.data.DayRecord;
+import com.example.demo.data.Meal;
 import com.example.demo.data.MealConsumption;
+import com.example.demo.enums.ChildNeeds;
 import com.example.demo.enums.MealType;
 import com.example.demo.repositories.ChildRepository;
+import com.example.demo.services.DayRecordService;
 import com.example.demo.services.KitchenService;
 import com.example.demo.repositories.DayRecordRepository;
 import lombok.AllArgsConstructor;
@@ -17,6 +20,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Controller
@@ -27,6 +31,7 @@ public class KitchenController {
     private final KitchenService kitchenService;
     private final DayRecordRepository dayRecordRepository;
     private final ChildRepository childRepository;
+    private final DayRecordService dayRecordService;
 
     @GetMapping("/home")
     public String kitchenHome() {
@@ -51,15 +56,18 @@ public class KitchenController {
     }
 
     @PostMapping("/add-meals")
-    public String addMeal(@RequestParam MealType mealType, @RequestParam String description) {
-        kitchenService.addMealForToday(mealType, description);
+    public String addMeal(@RequestParam MealType mealType, @RequestParam String description, @RequestParam(required = false) Set<ChildNeeds> supportedNeeds) {
+        kitchenService.addMealForToday(mealType, description,supportedNeeds);
         return "redirect:/kitchen/add-meals";
     }
 
     @GetMapping("/mark-meals")
     public String markMealsPage(Model model) {
+        DayRecord dayRecord = dayRecordService.getOrCreateTodayRecord();
+        List<Meal> meals = kitchenService.getMealsForDay(dayRecord);
         model.addAttribute("children", childRepository.findAll());
         model.addAttribute("mealTypes", MealType.values());
+        model.addAttribute("meals", meals);
 
         // Group MealConsumption by MealType
         Map<MealType, List<MealConsumption>> groupedMealHistory = kitchenService.getMealConsumptionsForToday()

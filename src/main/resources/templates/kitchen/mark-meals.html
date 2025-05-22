@@ -2,53 +2,145 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Marquer la Consommation des Repas</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-<h1>Marquer la Consommation des Repas</h1>
-<form th:action="@{/kitchen/mark-meals}" method="post">
-    <label>Enfant :</label>
-    <label>
-        <select name="childId" required>
-            <option th:each="child : ${children}" th:value="${child.id}" th:text="${child.firstName + ' ' + child.lastName}"></option>
-        </select>
-    </label>
-    <label>Type de Repas :</label>
-    <label>
-        <select name="mealType" required>
-            <option th:each="type : ${mealTypes}" th:value="${type}" th:text="${type}"></option>
-        </select>
-    </label>
-    <button type="submit">Marquer</button>
-</form>
 
-<h2>Historique des Repas</h2>
-<div th:if="${mealHistory != null}">
-    <div th:each="type : ${mealTypes}">
-        <h3 th:text="${type}"></h3>
-        <table>
-            <thead>
-            <tr>
-                <th>Enfant</th>
-                <th>Heure</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="consumption : ${mealHistory.get(type)}">
-                <td th:text="${consumption.child.firstName + ' ' + consumption.child.lastName}"></td>
-                <td th:text="${#temporals.format(consumption.time, 'HH:mm')}"></td>
-            </tr>
-            <tr th:if="${mealHistory.get(type) == null || mealHistory.get(type).isEmpty()}">
-                <td colspan="2">Aucun enfant n'a mangé ce repas</td>
-            </tr>
-            </tbody>
-        </table>
+    <header class="header">
+        <div class="container header-content">
+            <a href="#" class="logo">
+                <i class="fas fa-child"></i> Daycare
+            </a>
+            <nav class="nav">
+                <a th:href="@{/kitchen/home}" class="nav-link">
+                    <i class="fas fa-home"></i> Accueil
+                </a>
+                <a th:href="@{/kitchen/add-meals}" class="nav-link">
+                    <i class="fas fa-hamburger"></i> Ajouter repas
+                </a>
+                <a th:href="@{/logout}" class="nav-link">
+                    <i class="fas fa-sign-out-alt"></i> Déconnexion
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1>
+            <i class="fas fa-check-square" style="color: var(--primary);"></i>
+            Marquer la consommation des repas
+        </h1>
+
+        <div class="card">
+            <h2 class="mt-4">
+                <i class="fas fa-list" style="color: var(--primary);"></i>
+                Liste des repas et besoins pris en charge
+            </h2>
+
+            <div class="card">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Type de repas</th>
+                        <th>Description</th>
+                        <th>Besoins pris en charge</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="meal : ${meals}">
+                        <td th:text="${meal.mealType}"></td>
+                        <td th:text="${meal.description}"></td>
+                        <td>
+                            <ul>
+                                <li th:each="need : ${meal.supportedNeeds}" th:text="${#strings.capitalize(need.name().toLowerCase().replace('_', ' '))}"></li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr th:if="${meals == null or meals.isEmpty()}">
+                        <td colspan="3" class="text-center text-gray">Aucun repas enregistré</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="card">
+            <form th:action="@{/kitchen/mark-meals}" method="post" class="flex flex-col gap-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="form-group">
+                        <label for="childId">Enfant:</label>
+                        <select id="childId" name="childId" required>
+                            <option th:each="child : ${children}" th:value="${child.id}" th:text="${child.firstName + ' ' + child.lastName}"></option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="mealType">Type de repas:</label>
+                        <select id="mealType" name="mealType" required>
+                            <option th:each="type : ${mealTypes}" th:value="${type}" th:text="${type}"></option>
+                        </select>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn">
+                    <i class="fas fa-check"></i> Marquer
+                </button>
+            </form>
+        </div>
+        
+        <h2 class="mt-4">
+            <i class="fas fa-history" style="color: var(--primary);"></i>
+            Historique des repas
+        </h2>
+        
+        <div th:if="${mealHistory != null}">
+            <div th:each="type : ${mealTypes}" class="card mb-4">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <span th:if="${type == T(com.example.demo.enums.MealType).PETIT_DEJEUNER}" class="badge badge-primary">Petit-déjeuner</span>
+                        <span th:if="${type == T(com.example.demo.enums.MealType).DEJEUNER}" class="badge badge-secondary">Déjeuner</span>
+                        <span th:if="${type == T(com.example.demo.enums.MealType).DINER}"class="badge badge-warning">Diner</span>
+                    </h3>
+                </div>
+                
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Enfant</th>
+                            <th>Heure</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="consumption : ${mealHistory.get(type)}">
+                            <td th:text="${consumption.child.firstName + ' ' + consumption.child.lastName}"></td>
+                            <td th:text="${#temporals.format(consumption.time, 'HH:mm')}"></td>
+                        </tr>
+                        <tr th:if="${mealHistory.get(type) == null || mealHistory.get(type).isEmpty()}">
+                            <td colspan="2" class="text-center text-gray">Aucun enfant n'a mangé ce repas</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div th:if="${mealHistory == null}" class="alert alert-warning">
+            <i class="fas fa-exclamation-triangle"></i> Aucun historique des repas disponible.
+        </div>
+        
+        <div class="mt-4">
+            <a th:href="@{/kitchen/home}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Retour
+            </a>
+        </div>
     </div>
-</div>
-<div th:if="${mealHistory == null}">
-    <p>Aucun historique des repas disponible.</p>
-</div>
-
-<a th:href="@{/kitchen/home}">Retour</a>
+    
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Daycare Management System</p>
+        </div>
+    </footer>
 </body>
 </html>

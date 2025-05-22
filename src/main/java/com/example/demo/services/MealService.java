@@ -35,4 +35,6 @@ public class MealService {
     public List<MealConsumption> getTodayMealConsumptionsForChild(Child child) {
         return mealConsumptionRepository.findByChildAndMeal_DayRecord(child, dayRecordService.getOrCreateTodayRecord());
     }
+
+
 }

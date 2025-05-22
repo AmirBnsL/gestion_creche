@@ -2,36 +2,108 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ajouter des Repas</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-<h1>Ajouter des Repas pour Aujourd'hui</h1>
-<form th:action="@{/kitchen/add-meals}" method="post">
-    <label>Type de Repas :</label>
-    <select name="mealType" required>
-        <option th:each="type : ${T(com.example.demo.enums.MealType).values()}" th:value="${type}" th:text="${type}"></option>
-    </select>
-    <label>Description :</label>
-    <input type="text" name="description" placeholder="Description" required/>
-    <button type="submit">Ajouter</button>
-</form>
+    <header class="header">
+        <div class="container header-content">
+            <a href="#" class="logo">
+                <i class="fas fa-child"></i> Daycare
+            </a>
+            <nav class="nav">
+                <a th:href="@{/kitchen/home}" class="nav-link">
+                    <i class="fas fa-home"></i> Accueil
+                </a>
+                <a th:href="@{/kitchen/mark-meals}" class="nav-link">
+                    <i class="fas fa-check-square"></i> Marquer consommation
+                </a>
+                <a th:href="@{/logout}" class="nav-link">
+                    <i class="fas fa-sign-out-alt"></i> Déconnexion
+                </a>
+            </nav>
+        </div>
+    </header>
 
-<h2>Repas Enregistrés</h2>
-<table>
-    <thead>
-    <tr>
-        <th>Type</th>
-        <th>Description</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="meal : ${meals}">
-        <td th:text="${meal.mealType}"></td>
-        <td th:text="${meal.description}"></td>
-    </tr>
-    </tbody>
-</table>
-
-<a th:href="@{/kitchen/home}">Retour</a>
+    <div class="container">
+        <h1>
+            <i class="fas fa-hamburger" style="color: var(--primary);"></i>
+            Ajouter des repas pour aujourd'hui
+        </h1>
+        
+        <div class="card">
+            <form th:action="@{/kitchen/add-meals}" method="post" class="flex flex-col gap-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="form-group">
+                        <label for="mealType">Type de repas:</label>
+                        <select id="mealType" name="mealType" required>
+                            <option th:each="type : ${T(com.example.demo.enums.MealType).values()}" th:value="${type}" th:text="${type}"></option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="description">Description:</label>
+                        <input type="text" id="description" name="description" placeholder="Description du repas" required/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="supportedNeeds">Besoins pris en charge:</label>
+                    <select id="supportedNeeds" name="supportedNeeds" multiple class="form-control">
+                        <option th:each="need : ${T(com.example.demo.enums.ChildNeeds).values()}"
+                                th:value="${need}"
+                                th:text="${#strings.capitalize(need.name().toLowerCase().replace('_', ' '))}">
+                        </option>
+                    </select>
+                    <small class="form-text text-muted">Maintenez la touche Ctrl (ou Cmd sur Mac) pour sélectionner plusieurs besoins.</small>
+                </div>
+                <button type="submit" class="btn">
+                    <i class="fas fa-plus"></i> Ajouter
+                </button>
+            </form>
+        </div>
+        
+        <h2 class="mt-4">
+            <i class="fas fa-list" style="color: var(--primary);"></i>
+            Repas enregistrés
+        </h2>
+        
+        <div class="card">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <tr th:each="meal : ${meals}">
+                    <td>
+                        <span th:if="${meal != null and meal.mealType == T(com.example.demo.enums.MealType).PETIT_DEJEUNER}" class="badge badge-primary">Petit-déjeuner</span>
+                        <span th:if="${meal != null and meal.mealType == T(com.example.demo.enums.MealType).DEJEUNER}" class="badge badge-secondary">Déjeuner</span>
+                        <span th:if="${meal != null and meal.mealType == T(com.example.demo.enums.MealType).DINER}" class="badge badge-danger">Dîner</span>
+                    </td>
+                    <td th:text="${meal != null ? meal.description : ''}"></td>
+                </tr>
+                <tr th:if="${meals == null or meals.isEmpty()}">
+                    <td colspan="2" class="text-center text-gray">Aucun repas enregistré</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="mt-4">
+            <a th:href="@{/kitchen/home}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Retour
+            </a>
+        </div>
+    </div>
+    
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Daycare Management System</p>
+        </div>
+    </footer>
 </body>
 </html>

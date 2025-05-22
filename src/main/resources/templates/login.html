@@ -1,13 +1,51 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head><title>Login</title></head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
 <body>
-<h2>Connexion</h2>
-<form th:action="@{/login}" method="post">
-    <label>Nom d'utilisateur: <input type="text" name="username"/></label><br>
-    <label>Mot de passe: <input type="password" name="password"/></label><br>
-    <button type="submit">Se connecter</button>
-</form>
-<p>Pas encore inscrit ? <a th:href="@{/register}">Créer un compte</a></p>
+    <div class="container">
+        <div class="card" style="max-width: 400px; margin: 5rem auto;">
+            <div class="card-header text-center">
+                <h2 class="card-title">
+                    <i class="fas fa-child text-lg" style="color: var(--primary);"></i> 
+                    Connexion
+                </h2>
+            </div>
+            <form th:action="@{/login}" method="post" class="flex flex-col gap-4">
+                <div class="form-group">
+                    <label for="username">Nom d'utilisateur:</label>
+                    <div class="flex items-center">
+                        <span class="p-4" style="background-color: var(--border); border: 1px solid var(--input); border-right: none; border-radius: var(--radius) 0 0 var(--radius);">
+                            <i class="fas fa-user" style="color: #64748b;"></i>
+                        </span>
+                        <input type="text" id="username" name="username" style="border-radius: 0 var(--radius) var(--radius) 0;" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="password">Mot de passe:</label>
+                    <div class="flex items-center">
+                        <span class="p-4" style="background-color: var(--border); border: 1px solid var(--input); border-right: none; border-radius: var(--radius) 0 0 var(--radius);">
+                            <i class="fas fa-lock" style="color: #64748b;"></i>
+                        </span>
+                        <input type="password" id="password" name="password" style="border-radius: 0 var(--radius) var(--radius) 0;" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn">Se connecter</button>
+            </form>
+            <div class="mt-4 text-center">
+                <p>Pas encore inscrit ? <a th:href="@{/register}" class="btn-link">Créer un compte</a></p>
+            </div>
+        </div>
+    </div>
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Daycare Management System</p>
+        </div>
+    </footer>
 </body>
 </html>

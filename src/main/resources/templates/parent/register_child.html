@@ -1,16 +1,93 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head><title>Register Child</title></head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Child</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
 <body>
-<h2>Register Child</h2>
-<form th:action="@{/parent/child/register}" th:object="${child}" method="post">
-    <label>First Name: <input type="text" th:field="*{firstName}" /></label><br/>
-    <label>Last Name: <input type="text" th:field="*{lastName}" /></label><br/>
-    <label>Birth Date: <input type="date" th:field="*{birthDate}" /></label><br/>
-    <label>Address: <input type="text" th:field="*{address}" /></label><br/>
-    <label>Allergies: <textarea th:field="*{allergies}"></textarea></label><br/>
-    <label>Special Needs: <textarea th:field="*{specialNeeds}"></textarea></label><br/>
-    <button type="submit">Submit</button>
-</form>
+    <header class="header">
+        <div class="container header-content">
+            <a href="#" class="logo">
+                <i class="fas fa-child"></i> Daycare
+            </a>
+            <nav class="nav">
+                <a th:href="@{/parent/home}" class="nav-link">
+                    <i class="fas fa-home"></i> Accueil
+                </a>
+                <a th:href="@{/parent/children}" class="nav-link">
+                    <i class="fas fa-child"></i> Mes enfants
+                </a>
+                <a th:href="@{/logout}" class="nav-link">
+                    <i class="fas fa-sign-out-alt"></i> Déconnexion
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">
+                    <i class="fas fa-baby text-lg" style="color: var(--primary);"></i> 
+                    Inscrire un enfant
+                </h2>
+            </div>
+            
+            <form th:action="@{/parent/child/register}" th:object="${child}" method="post" class="flex flex-col gap-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="form-group">
+                        <label for="firstName">Prénom:</label>
+                        <input type="text" id="firstName" th:field="*{firstName}" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="lastName">Nom:</label>
+                        <input type="text" id="lastName" th:field="*{lastName}" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="birthDate">Date de naissance:</label>
+                    <input type="date" id="birthDate" th:field="*{birthDate}" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="address">Adresse:</label>
+                    <input type="text" id="address" th:field="*{address}" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="allergies">Allergies:</label>
+                    <textarea id="allergies" th:field="*{allergies}" placeholder="Listez toutes les allergies ou indiquez 'Aucune'"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="specialNeeds">Besoins particuliers:</label>
+                    <textarea id="specialNeeds" th:field="*{specialNeeds}" placeholder="Indiquez tout besoin particulier ou laissez vide si aucun"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="needs">Besoins de l'enfant:</label>
+                    <select id="needs" th:field="*{needs}" multiple class="form-control">
+                        <option th:each="need : ${T(com.example.demo.enums.ChildNeeds).values()}"
+                                th:value="${need}"
+                                th:text="${#strings.capitalize(need.name().toLowerCase().replace('_', ' '))}">
+                        </option>
+                    </select>
+                    <small class="form-text text-muted">Maintenez la touche Ctrl (ou Cmd sur Mac) pour sélectionner plusieurs besoins.</small>
+                </div>
+                
+                <button type="submit" class="btn">Soumettre l'inscription</button>
+            </form>
+        </div>
+    </div>
+    
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Daycare Management System</p>
+        </div>
+    </footer>
 </body>
 </html>

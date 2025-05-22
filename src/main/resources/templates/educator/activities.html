@@ -1,71 +1,130 @@
-<!-- src/main/resources/templates/educator/activities.html -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Planification des Activités</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
+    <header class="header">
+        <div class="container header-content">
+            <a href="#" class="logo">
+                <i class="fas fa-child"></i> Daycare
+            </a>
+            <nav class="nav">
+                <a th:href="@{/educator/home}" class="nav-link">
+                    <i class="fas fa-home"></i> Accueil
+                </a>
+                <a th:href="@{/educator/attendance}" class="nav-link">
+                    <i class="fas fa-clipboard-check"></i> Présences
+                </a>
+                <a th:href="@{/educator/development}" class="nav-link">
+                    <i class="fas fa-chart-line"></i> Développement
+                </a>
+                <a th:href="@{/logout}" class="nav-link">
+                    <i class="fas fa-sign-out-alt"></i> Déconnexion
+                </a>
+            </nav>
+        </div>
+    </header>
 
-<h1>Planifier une nouvelle activité pour Jour - <span th:text="${#temporals.format(today,'dd-MM-yyyy')}"></span></h1>
-<form th:action="@{/educator/activities}" th:object="${activity}" method="post">
-    <div>
-        <label for="title">Titre :</label>
-        <input type="text" id="title" th:field="*{title}" required>
+    <div class="container">
+        <h1>
+            <i class="fas fa-running" style="color: var(--primary);"></i>
+            Planifier une nouvelle activité pour <span th:text="${#temporals.format(today,'dd-MM-yyyy')}"></span>
+        </h1>
+        
+        <div class="card">
+            <form th:action="@{/educator/activities}" th:object="${activity}" method="post" class="flex flex-col gap-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="form-group">
+                        <label for="title">Titre:</label>
+                        <input type="text" id="title" th:field="*{title}" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="description">Description:</label>
+                        <textarea id="description" th:field="*{description}" required></textarea>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="form-group">
+                        <label for="startTime">Heure de début:</label>
+                        <input type="time" id="startTime" th:field="*{startTime}" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="endTime">Heure de fin:</label>
+                        <input type="time" id="endTime" th:field="*{endTime}" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="participants">Participants:</label>
+                    <select id="participants" th:field="*{participants}" multiple size="5" style="height: auto; min-height: 150px;">
+                        <option th:each="child : ${children}"
+                                th:value="${child.id}"
+                                th:text="${child.firstName + ' ' + child.lastName}">
+                        </option>
+                    </select>
+                    <p class="text-sm text-gray mt-2">Maintenez la touche Ctrl (ou Cmd sur Mac) pour sélectionner plusieurs enfants</p>
+                </div>
+                
+                <button type="submit" class="btn">
+                    <i class="fas fa-save"></i> Enregistrer
+                </button>
+            </form>
+        </div>
+        
+        <h2 class="mt-4">
+            <i class="fas fa-list" style="color: var(--primary);"></i>
+            Liste des Activités Planifiées
+        </h2>
+        
+        <div class="card">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Titre</th>
+                        <th>Description</th>
+                        <th>Début</th>
+                        <th>Fin</th>
+                        <th>Participants</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="act : ${activityList}">
+                        <td th:text="${act.title}">Titre</td>
+                        <td th:text="${act.description}">Desc</td>
+                        <td th:text="${#temporals.format(act.startTime, 'HH:mm')}">Start</td>
+                        <td th:text="${#temporals.format(act.endTime, 'HH:mm')}">End</td>
+                        <td>
+                            <span th:each="c, iterStat : ${act.participants}"
+                                  th:text="${c.firstName + ' ' + c.lastName}"
+                                  th:append="${!iterStat.last} ? ', ' : ''"></span>
+                        </td>
+                    </tr>
+                    <tr th:if="${activityList.isEmpty()}">
+                        <td colspan="5" class="text-center text-gray">Aucune activité planifiée pour aujourd'hui</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="mt-4">
+            <a th:href="@{/educator/home}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Retour au tableau de bord
+            </a>
+        </div>
     </div>
-    <div>
-        <label for="description">Description :</label>
-        <textarea id="description" th:field="*{description}" required></textarea>
-    </div>
-    <div>
-        <label for="startTime">Heure de début :</label>
-        <input type="time" id="startTime" th:field="*{startTime}" required>
-    </div>
-    <div>
-        <label for="endTime">Heure de fin :</label>
-        <input type="time" id="endTime" th:field="*{endTime}" required>
-    </div>
-    <div>
-        <label for="participants">Participants :</label>
-        <select id="participants" th:field="*{participants}" multiple size="5">
-            <option th:each="child : ${children}"
-                    th:value="${child.id}"
-                    th:text="${child.firstName + ' ' + child.lastName}">
-            </option>
-        </select>
-    </div>
-    <div>
-        <button type="submit">Enregistrer</button>
-    </div>
-</form>
-
-<h2>Liste des Activités Planifiées</h2>
-<table>
-    <thead>
-    <tr>
-        <th>Titre</th>
-        <th>Description</th>
-        <th>Début</th>
-        <th>Fin</th>
-        <th>Participants</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="act : ${activityList}">
-        <td th:text="${act.title}">Titre</td>
-        <td th:text="${act.description}">Desc</td>
-        <td th:text="${#temporals.format(act.startTime, 'HH:mm')}">Start</td>
-        <td th:text="${#temporals.format(act.endTime, 'HH:mm')}">End</td>
-        <td>
-            <span th:each="c, iterStat : ${act.participants}"
-                  th:text="${c.firstName + ' ' + c.lastName}"
-                  th:append="${!iterStat.last} ? ', ' : ''"></span>
-        </td>
-    </tr>
-    </tbody>
-</table>
-
-<a th:href="@{/educator/home}">Retour au tableau de bord</a>
+    
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Daycare Management System</p>
+        </div>
+    </footer>
 </body>
 </html>

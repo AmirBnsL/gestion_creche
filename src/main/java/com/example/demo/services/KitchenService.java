@@ -4,8 +4,8 @@ import com.example.demo.data.Child;
 import com.example.demo.data.DayRecord;
 import com.example.demo.data.Meal;
 import com.example.demo.data.MealConsumption;
+import com.example.demo.enums.ChildNeeds;
 import com.example.demo.enums.MealType;
-import com.example.demo.repositories.ChildRepository;
 import com.example.demo.repositories.MealConsumptionRepository;
 import com.example.demo.repositories.MealRepository;
 import lombok.AllArgsConstructor;
@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Set;
 
 
 @Service
@@ -41,7 +42,7 @@ public class KitchenService {
         }
     }
 
-    public void addMealForToday(MealType mealType, String description) {
+    public void addMealForToday(MealType mealType, String description, Set<ChildNeeds> supportedNeeds) {
         DayRecord today = dayRecordService.getOrCreateTodayRecord();
         Meal meal = mealRepository.findByDayRecordAndMealType(today, mealType)
                 .orElseGet(() -> {
@@ -49,9 +50,11 @@ public class KitchenService {
                     newMeal.setDate(today.getDate());
                     newMeal.setMealType(mealType);
                     newMeal.setDayRecord(today);
+                    ;
                     return newMeal;
                 });
         meal.setDescription(description);
+        meal.setSupportedNeeds(supportedNeeds);
         mealRepository.save(meal);
     }
 
@@ -64,6 +67,9 @@ public class KitchenService {
         Meal meal = mealRepository.findByDateAndMealType(LocalDate.now(), mealType)
                 .orElseThrow(() -> new IllegalStateException("Meal not found"));
 
+        if (!isMealCompatibleWithChild(meal, child)) {
+            throw new IllegalStateException("Meal is not compatible with child's needs.");
+        }
         boolean alreadyConsumed = mealConsumptionRepository.existsByMealAndChild(meal, child);
         if (alreadyConsumed) {
             throw new IllegalStateException("Child has already consumed this meal today.");
@@ -74,5 +80,10 @@ public class KitchenService {
         consumption.setChild(child);
         consumption.setTime(time);
         mealConsumptionRepository.save(consumption);
+    }
+
+
+    public boolean isMealCompatibleWithChild(Meal meal, Child child) {
+        return meal.getSupportedNeeds().containsAll(child.getNeeds());
     }
 }

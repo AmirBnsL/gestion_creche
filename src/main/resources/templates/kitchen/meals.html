@@ -1,30 +1,91 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head><title>Repas du Jour</title></head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Repas du Jour</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
 <body>
-<h2>Ajouter un repas pour un enfant</h2>
-<form th:action="@{/kitchen/meals}" th:object="${meal}" method="post">
-    <label>Enfant :</label>
-    <select th:field="*{child}" required>
-        <option th:each="c : ${children}" th:value="${c.id}" th:text="${c.firstName + ' ' + c.lastName}"></option>
-    </select>
-    <input type="text" th:field="*{description}" placeholder="Description" required/>
-    <button type="submit">Enregistrer</button>
-</form>
+    <header class="header">
+        <div class="container header-content">
+            <a href="#" class="logo">
+                <i class="fas fa-child"></i> Daycare
+            </a>
+            <nav class="nav">
+                <a th:href="@{/kitchen/home}" class="nav-link">
+                    <i class="fas fa-home"></i> Accueil
+                </a>
+                <a th:href="@{/logout}" class="nav-link">
+                    <i class="fas fa-sign-out-alt"></i> Déconnexion
+                </a>
+            </nav>
+        </div>
+    </header>
 
-<h2>Repas Enregistrés Aujourd'hui</h2>
-<table border="1">
-    <thead>
-    <tr><th>Enfant</th><th>Description</th></tr>
-    </thead>
-    <tbody>
-    <tr th:each="m : ${meals}">
-        <td th:text="${m.child.firstName + ' ' + m.child.lastName}"></td>
-        <td th:text="${m.description}"></td>
-    </tr>
-    </tbody>
-</table>
-
-<a th:href="@{/kitchen/home}">Retour</a>
+    <div class="container">
+        <h1>
+            <i class="fas fa-utensils" style="color: var(--primary);"></i>
+            Ajouter un repas pour un enfant
+        </h1>
+        
+        <div class="card">
+            <form th:action="@{/kitchen/meals}" th:object="${meal}" method="post" class="flex flex-col gap-4">
+                <div class="form-group">
+                    <label for="child">Enfant:</label>
+                    <select id="child" th:field="*{child}" required>
+                        <option th:each="c : ${children}" th:value="${c.id}" th:text="${c.firstName + ' ' + c.lastName}"></option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="description">Description:</label>
+                    <input type="text" id="description" th:field="*{description}" placeholder="Description du repas" required/>
+                </div>
+                
+                <button type="submit" class="btn">
+                    <i class="fas fa-save"></i> Enregistrer
+                </button>
+            </form>
+        </div>
+        
+        <h2 class="mt-4">
+            <i class="fas fa-list" style="color: var(--primary);"></i>
+            Repas enregistrés aujourd'hui
+        </h2>
+        
+        <div class="card">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Enfant</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="m : ${meals}">
+                        <td th:text="${m.child.firstName + ' ' + m.child.lastName}"></td>
+                        <td th:text="${m.description}"></td>
+                    </tr>
+                    <tr th:if="${meals.isEmpty()}">
+                        <td colspan="2" class="text-center text-gray">Aucun repas enregistré aujourd'hui</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="mt-4">
+            <a th:href="@{/kitchen/home}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Retour
+            </a>
+        </div>
+    </div>
+    
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Daycare Management System</p>
+        </div>
+    </footer>
 </body>
 </html>

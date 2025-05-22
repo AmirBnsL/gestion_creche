@@ -1,92 +1,194 @@
-<!-- src/main/resources/templates/parent/child-details.html -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="fr">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Détails de l'enfant</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-<h1 th:text="${child.firstName + ' ' + child.lastName}">Nom de l'enfant</h1>
-<p><strong>Date de naissance :</strong> <span th:text="${#dates.format(child.birthDate, 'yyyy-MM-dd')}"></span></p>
-<p><strong>Adresse :</strong> <span th:text="${child.address}"></span></p>
-<p><strong>Allergies :</strong> <span th:text="${child.allergies}"></span></p>
-<p><strong>Besoins particuliers :</strong> <span th:text="${child.specialNeeds}"></span></p>
+    <header class="header">
+        <div class="container header-content">
+            <a href="#" class="logo">
+                <i class="fas fa-child"></i> Daycare
+            </a>
+            <nav class="nav">
+                <a th:href="@{/parent/home}" class="nav-link">
+                    <i class="fas fa-home"></i> Accueil
+                </a>
+                <a th:href="@{/parent/children}" class="nav-link">
+                    <i class="fas fa-child"></i> Mes enfants
+                </a>
+                <a th:href="@{/logout}" class="nav-link">
+                    <i class="fas fa-sign-out-alt"></i> Déconnexion
+                </a>
+            </nav>
+        </div>
+    </header>
 
-<h2>Présence aujourd'hui</h2>
-<p>
-        <span th:if="${attendance != null}">
-            Arrivé à <span th:text="${#temporals.format(attendance.arrivalTime, 'HH:mm')}"></span><br/>
-            <span th:if="${attendance.departureTime != null}">
-                Parti à <span th:text="${#temporals.format(attendance.departureTime, 'HH:mm')}"></span>
-            </span>
-            <span th:if="${attendance.departureTime == null}">Pas encore parti</span>
-        </span>
-    <span th:if="${attendance == null}">Pas de présence enregistrée aujourd'hui</span>
-</p>
-
-<h2>Repas Aujourd'hui</h2>
-<table>
-    <thead>
-    <tr>
-        <th>Type</th>
-        <th>Description</th>
-        <th>Heure de Consommation</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="consumption : ${mealConsumptions}">
-        <td th:text="${consumption.meal.mealType}"></td>
-        <td th:text="${consumption.meal.description}"></td>
-        <td th:text="${#temporals.format(consumption.time, 'HH:mm')}"></td>
-    </tr>
-    <tr th:if="${mealConsumptions.isEmpty()}">
-        <td colspan="3">Aucun repas enregistré aujourd'hui</td>
-    </tr>
-    </tbody>
-</table>
-
-<h2>Développements</h2>
-<table>
-    <thead>
-    <tr>
-        <th>Date</th>
-        <th>Description</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="development : ${developments}">
-        <td th:text="${#temporals.format(development.date, 'yyyy-MM-dd')}"></td>
-        <td th:text="${development.observations}"></td>
-    </tr>
-    <tr th:if="${developments.isEmpty()}">
-        <td colspan="2">Aucun développement enregistré</td>
-    </tr>
-    </tbody>
-</table>
-
-
-<h2>Activités Aujourd'hui</h2>
-<table>
-    <thead>
-    <tr>
-        <th>debut</th>
-        <th>fin</th>
-        <th>Description</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="activity : ${activities}">
-        <td th:text="${#temporals.format(activity.getStartTime(), 'HH:mm')}"></td>
-        <td th:text="${#temporals.format(activity.getEndTime(), 'HH:mm')}"></td>
-        <td th:text="${activity.description}"></td>
-    </tr>
-    <tr th:if="${activities.isEmpty()}">
-        <td colspan="2">Aucune activité enregistrée aujourd'hui</td>
-    </tr>
-    </tbody>
-</table>
-
-<a th:href="@{/parent/children}">Retour</a>
-
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h1 class="card-title" th:text="${child.firstName + ' ' + child.lastName}">Nom de l'enfant</h1>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <div class="form-group">
+                    <label class="text-gray">Date de naissance:</label>
+                    <p class="font-bold" th:text="${#temporals.format(child.birthDate, 'yyyy-MM-dd')}"></p>
+                </div>
+                
+                <div class="form-group">
+                    <label class="text-gray">Adresse:</label>
+                    <p class="font-bold" th:text="${child.address}"></p>
+                </div>
+                
+                <div class="form-group">
+                    <label class="text-gray">Allergies:</label>
+                    <p class="font-bold" th:text="${child.allergies ?: 'Aucune'}"></p>
+                </div>
+                
+                <div class="form-group">
+                    <label class="text-gray">Besoins particuliers:</label>
+                    <p class="font-bold" th:text="${child.specialNeeds ?: 'Aucun'}"></p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">
+                    <i class="fas fa-calendar-check" style="color: var(--primary);"></i>
+                    Présence aujourd'hui
+                </h2>
+            </div>
+            
+            <div class="p-4">
+                <div th:if="${attendance != null}" class="alert alert-success">
+                    <p>
+                        <i class="fas fa-clock"></i> Arrivé à 
+                        <span class="font-bold" th:text="${#temporals.format(attendance.arrivalTime, 'HH:mm')}"></span>
+                    </p>
+                    <p th:if="${attendance.departureTime != null}">
+                        <i class="fas fa-clock"></i> Parti à 
+                        <span class="font-bold" th:text="${#temporals.format(attendance.departureTime, 'HH:mm')}"></span>
+                    </p>
+                    <p th:if="${attendance.departureTime == null}" class="badge badge-primary">
+                        Présent actuellement
+                    </p>
+                </div>
+                <div th:if="${attendance == null}" class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle"></i> Pas de présence enregistrée aujourd'hui
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">
+                    <i class="fas fa-utensils" style="color: var(--primary);"></i>
+                    Repas Aujourd'hui
+                </h2>
+            </div>
+            
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Description</th>
+                        <th>Heure de Consommation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="consumption : ${mealConsumptions}">
+                        <td>
+                            <span th:if="${consumption.meal.mealType == 'BREAKFAST'}" class="badge badge-primary">Petit-déjeuner</span>
+                            <span th:if="${consumption.meal.mealType == 'LUNCH'}" class="badge badge-secondary">Déjeuner</span>
+                            <span th:if="${consumption.meal.mealType == 'SNACK'}" class="badge badge-warning">Goûter</span>
+                            <span th:if="${consumption.meal.mealType == 'DINNER'}" class="badge badge-accent">Dîner</span>
+                        </td>
+                        <td th:text="${consumption.meal.description}"></td>
+                        <td th:text="${#temporals.format(consumption.time, 'HH:mm')}"></td>
+                    </tr>
+                    <tr th:if="${mealConsumptions.isEmpty()}">
+                        <td colspan="3" class="text-center text-gray">Aucun repas enregistré aujourd'hui</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">
+                    <i class="fas fa-chart-line" style="color: var(--primary);"></i>
+                    Développements
+                </h2>
+            </div>
+            
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Observations</th>
+                        <th>progrés</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="development : ${developments}">
+                        <td th:text="${#temporals.format(development.date, 'yyyy-MM-dd')}"></td>
+                        <td th:text="${development.observations}"></td>
+                        <td th:text="${development.progress}"></td>
+                    </tr>
+                    <tr th:if="${developments.isEmpty()}">
+                        <td colspan="2" class="text-center text-gray">Aucun développement enregistré</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">
+                    <i class="fas fa-running" style="color: var(--primary);"></i>
+                    Activités Aujourd'hui
+                </h2>
+            </div>
+            
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Début</th>
+                        <th>Fin</th>
+                        <th>titre</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="activity : ${activities}">
+                        <td th:text="${#temporals.format(activity.getStartTime(), 'HH:mm')}"></td>
+                        <td th:text="${#temporals.format(activity.getEndTime(), 'HH:mm')}"></td>
+                        <td th:text="${activity.title}"></td>
+                        <td th:text="${activity.description}"></td>
+                    </tr>
+                    <tr th:if="${activities.isEmpty()}">
+                        <td colspan="3" class="text-center text-gray">Aucune activité enregistrée aujourd'hui</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="mt-4">
+            <a th:href="@{/parent/children}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Retour à la liste
+            </a>
+        </div>
+    </div>
+    
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Daycare Management System</p>
+        </div>
+    </footer>
 </body>
 </html>

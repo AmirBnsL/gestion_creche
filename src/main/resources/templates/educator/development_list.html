@@ -1,16 +1,66 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Development Records</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-<h2>Children Development Records</h2>
-<ul>
-    <li th:each="child : ${children}">
-        <span th:text="${child.firstName + ' ' + child.lastName}"></span>
-        <a th:href="@{'/educator/development/' + ${child.id}}">Get Detailed Development</a>
-    </li>
-</ul>
-<a th:href="@{/educator/home}">Back to Dashboard</a>
+    <header class="header">
+        <div class="container header-content">
+            <a href="#" class="logo">
+                <i class="fas fa-child"></i> Daycare
+            </a>
+            <nav class="nav">
+                <a th:href="@{/educator/home}" class="nav-link">
+                    <i class="fas fa-home"></i> Accueil
+                </a>
+                <a th:href="@{/educator/attendance}" class="nav-link">
+                    <i class="fas fa-clipboard-check"></i> Présences
+                </a>
+                <a th:href="@{/educator/activities}" class="nav-link">
+                    <i class="fas fa-running"></i> Activités
+                </a>
+                <a th:href="@{/logout}" class="nav-link">
+                    <i class="fas fa-sign-out-alt"></i> Déconnexion
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1>
+            <i class="fas fa-chart-line" style="color: var(--primary);"></i>
+            Suivi du développement des enfants
+        </h1>
+        
+        <div class="card">
+            <div class="grid grid-cols-3 gap-4">
+                <div th:each="child : ${children}" class="menu-card">
+                    <div class="flex items-center gap-2 mb-2">
+                        <i class="fas fa-child" style="color: var(--primary);"></i>
+                        <span th:text="${child.firstName + ' ' + child.lastName}" class="font-bold"></span>
+                    </div>
+                    <a th:href="@{'/educator/development/' + ${child.id}}" class="btn btn-sm">
+                        <i class="fas fa-chart-line"></i> Voir le développement
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mt-4">
+            <a th:href="@{/educator/home}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Retour au tableau de bord
+            </a>
+        </div>
+    </div>
+    
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Daycare Management System</p>
+        </div>
+    </footer>
 </body>
 </html>

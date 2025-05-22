@@ -1,23 +1,84 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head><title>Pending Registrations</title></head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pending Registrations</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
 <body>
-<h2>Pending Children</h2>
-<table>
-    <tr><th>Name</th><th>Status</th><th>Actions</th></tr>
-    <tr th:each="child : ${children}">
-        <td th:text="${child.firstName + ' ' + child.lastName}"></td>
-        <td th:text="${child.status}"></td>
-        <td>
-            <form th:action="@{'/admin/approve/' + ${child.id}}" method="post">
-                <button type="submit">Approve</button>
-            </form>
-            <form th:action="@{'/admin/reject/' + ${child.id}}" method="post">
-                <button type="submit">Reject</button>
-            </form>
-        </td>
-    </tr>
-</table>
-    <a href="/admin/home">return home</a>
+    <header class="header">
+        <div class="container header-content">
+            <a href="#" class="logo">
+                <i class="fas fa-child"></i> Daycare
+            </a>
+            <nav class="nav">
+                <a th:href="@{/admin/home}" class="nav-link">
+                    <i class="fas fa-home"></i> Accueil
+                </a>
+                <a th:href="@{/admin/user/pending}" class="nav-link">
+                    <i class="fas fa-users"></i> Comptes en attente
+                </a>
+                <a th:href="@{/logout}" class="nav-link">
+                    <i class="fas fa-sign-out-alt"></i> Déconnexion
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1>
+            <i class="fas fa-child" style="color: var(--primary);"></i>
+            Inscriptions d'enfants en attente
+        </h1>
+        
+        <div class="card">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Statut</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="child : ${children}">
+                        <td th:text="${child.firstName + ' ' + child.lastName}"></td>
+                        <td>
+                            <span class="badge badge-warning" th:text="${child.status}"></span>
+                        </td>
+                        <td class="flex gap-2">
+                            <form th:action="@{'/admin/approve/' + ${child.id}}" method="post" style="display: inline;">
+                                <button type="submit" class="btn btn-success btn-sm">
+                                    <i class="fas fa-check"></i> Approuver
+                                </button>
+                            </form>
+                            <form th:action="@{'/admin/reject/' + ${child.id}}" method="post" style="display: inline;">
+                                <button type="submit" class="btn btn-danger btn-sm">
+                                    <i class="fas fa-times"></i> Rejeter
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr th:if="${children.isEmpty()}">
+                        <td colspan="3" class="text-center text-gray">Aucune inscription en attente</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="mt-4">
+            <a th:href="@{/admin/home}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Retour à l'accueil
+            </a>
+        </div>
+    </div>
+    
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Daycare Management System</p>
+        </div>
+    </footer>
 </body>
 </html>

@@ -1,17 +1,92 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head><meta charset="UTF-8"><title>Admin Home</title></head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Home</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
 <body>
-<h1>Admin Dashboard</h1>
-<table>
-    <tr><th>Name</th><th>Parent</th><th>Actions</th></tr>
-    <tr th:each="child : ${approvedChildren}">
-        <td th:text="${child.getFirstName()} + ' ' + ${child.getLastName()}"></td>
-        <td th:text="${child.getParent().getUsername()}"></td>
-        <td th:text="${child.status}"></td>
-    </tr>
-</table>
-<a href="/admin/pending" >Pending Registrations</a>
-<a href="/admin/user/pending" >Pending Registrations</a>
+    <header class="header">
+        <div class="container header-content">
+            <a href="#" class="logo">
+                <i class="fas fa-child"></i> Daycare
+            </a>
+            <nav class="nav">
+                <a th:href="@{/admin/home}" class="nav-link">
+                    <i class="fas fa-home"></i> Accueil
+                </a>
+                <a th:href="@{/admin/pending}" class="nav-link">
+                    <i class="fas fa-child"></i> Inscriptions en attente
+                </a>
+                <a th:href="@{/admin/user/pending}" class="nav-link">
+                    <i class="fas fa-users"></i> Comptes en attente
+                </a>
+                <a th:href="@{/logout}" class="nav-link">
+                    <i class="fas fa-sign-out-alt"></i> Déconnexion
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1>
+            <i class="fas fa-user-shield" style="color: var(--primary);"></i>
+            Tableau de bord administrateur
+        </h1>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Enfants approuvés</h2>
+            </div>
+            
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Parent</th>
+                        <th>Statut</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="child : ${approvedChildren}">
+                        <td th:text="${child.getFirstName()} + ' ' + ${child.getLastName()}"></td>
+                        <td th:text="${child.getParent().getUsername()}"></td>
+                        <td>
+                            <span class="badge badge-success" th:text="${child.status}"></span>
+                        </td>
+                    </tr>
+                    <tr th:if="${approvedChildren.isEmpty()}">
+                        <td colspan="3" class="text-center text-gray">Aucun enfant approuvé</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="grid grid-cols-2 gap-4 mt-4">
+            <a th:href="@{/admin/pending}" class="menu-card">
+                <div class="menu-icon">
+                    <i class="fas fa-child"></i>
+                </div>
+                <h3 class="menu-title">Inscriptions en attente</h3>
+                <p class="menu-description">Gérer les inscriptions d'enfants en attente d'approbation</p>
+            </a>
+            
+            <a th:href="@{/admin/user/pending}" class="menu-card">
+                <div class="menu-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3 class="menu-title">Comptes en attente</h3>
+                <p class="menu-description">Gérer les comptes utilisateurs en attente d'approbation</p>
+            </a>
+        </div>
+    </div>
+    
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Daycare Management System</p>
+        </div>
+    </footer>
 </body>
 </html>

@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 @Configuration
@@ -55,14 +56,21 @@ public class DataInitializer {
             // Create children for the parent
             Child amir = new Child();
             amir.setFirstName("Amir");
-            amir.setLastName("ParentLastName");
+            amir.setLastName("Benslaimi");
             amir.setParent(parent);
+            amir.setBirthDate(LocalDate.of(2018,9,11));
+            amir.setAddress("bouziane");
+            amir.setStatus(ChildStatus.VALIDATED);
             childRepository.save(amir);
 
             Child barae = new Child();
-            barae.setFirstName("Barae");
-            barae.setLastName("ParentLastName");
+            barae.setFirstName("Mohammed");
+            barae.setLastName("Benslaimi");
             barae.setParent(parent);
+            barae.setBirthDate(LocalDate.of(2015,5,15));
+            barae.setAddress("beziwech");
+            barae.setStatus(ChildStatus.VALIDATED);
+
             childRepository.save(barae);
 
             // Save parent with children

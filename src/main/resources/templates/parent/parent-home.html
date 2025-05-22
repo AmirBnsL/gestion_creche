@@ -2,14 +2,62 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Parent Home</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-<h1>Parent Dashboard</h1>
-<ul>
-    <li><a th:href="@{/parent/child/register}">Register Child</a></li>
-    <li><a th:href="@{/parent/children}">View Registered Children</a></li>
-    <li><a th:href="@{/parent/home}">Back to Dashboard</a></li>
-</ul>
+    <header class="header">
+        <div class="container header-content">
+            <a href="#" class="logo">
+                <i class="fas fa-child"></i> Daycare
+            </a>
+            <nav class="nav">
+                <a th:href="@{/parent/home}" class="nav-link">
+                    <i class="fas fa-home"></i> Accueil
+                </a>
+                <a th:href="@{/logout}" class="nav-link">
+                    <i class="fas fa-sign-out-alt"></i> Déconnexion
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1>Tableau de bord parent</h1>
+        
+        <div class="grid grid-cols-3">
+            <a th:href="@{/parent/child/register}" class="menu-card">
+                <div class="menu-icon">
+                    <i class="fas fa-user-plus"></i>
+                </div>
+                <h3 class="menu-title">Inscrire un enfant</h3>
+                <p class="menu-description">Enregistrez un nouvel enfant dans notre garderie</p>
+            </a>
+            
+            <a th:href="@{/parent/children}" class="menu-card">
+                <div class="menu-icon">
+                    <i class="fas fa-child"></i>
+                </div>
+                <h3 class="menu-title">Voir les enfants inscrits</h3>
+                <p class="menu-description">Consultez les informations de vos enfants</p>
+            </a>
+            
+            <a th:href="@{/parent/home}" class="menu-card">
+                <div class="menu-icon">
+                    <i class="fas fa-tachometer-alt"></i>
+                </div>
+                <h3 class="menu-title">Retour au tableau de bord</h3>
+                <p class="menu-description">Accédez à votre tableau de bord principal</p>
+            </a>
+        </div>
+    </div>
+    
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Daycare Management System</p>
+        </div>
+    </footer>
 </body>
 </html>

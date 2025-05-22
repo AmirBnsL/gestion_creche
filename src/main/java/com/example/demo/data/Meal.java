@@ -1,5 +1,6 @@
 package com.example.demo.data;
 
+import com.example.demo.enums.ChildNeeds;
 import com.example.demo.enums.MealType;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -20,8 +21,14 @@ public class Meal {
     private LocalDate date;
     private String description;
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.ORDINAL)
     private MealType mealType;
+
+    @ElementCollection(targetClass = ChildNeeds.class, fetch = FetchType.EAGER)
+    @CollectionTable(name = "meal_supported_needs", joinColumns = @JoinColumn(name = "meal_id"))
+    @Enumerated(EnumType.STRING)
+    private Set<ChildNeeds> supportedNeeds;
+
 
     @ManyToOne
     @JoinColumn(name = "kitchen_id")
