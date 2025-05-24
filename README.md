@@ -28,11 +28,12 @@ cd child-care-management
 ```
 
 ### 2. Configure the Database
+Using Sqlite is preferred for minimal configuration
+
 Update the database credentials in `src/main/resources/application.properties`:
 ```properties
 spring.datasource.url=jdbc:postgresql://localhost:5432/child_care_db
-spring.datasource.username=your_db_username
-spring.datasource.password=your_db_password
+
 spring.jpa.hibernate.ddl-auto=update
 ```
 
